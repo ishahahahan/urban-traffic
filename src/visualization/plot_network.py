@@ -290,12 +290,17 @@ def plot_time_series_comparison(timeseries_df, edge_ids, figsize=(14, 6)):
 
 if __name__ == "__main__":
     # Example usage
-    nodes = pd.read_csv('../../data/final/nodes_final.csv', dtype={'name': str})
-    edges = pd.read_csv('../../data/final/edges_final.csv')
-    
     import os
     
-    output_dir = '../../output'
+    # Get the project root directory (two levels up from this file)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(os.path.dirname(script_dir))
+    
+    # Use absolute paths
+    nodes = pd.read_csv(os.path.join(project_root, 'data/final/nodes_final.csv'), dtype={'name': str})
+    edges = pd.read_csv(os.path.join(project_root, 'data/final/edges_final.csv'))
+    
+    output_dir = os.path.join(project_root, 'output')
     os.makedirs(output_dir, exist_ok=True)
     
     # Plot network

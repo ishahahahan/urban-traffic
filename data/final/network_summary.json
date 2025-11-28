@@ -1,29 +1,35 @@
 {
-  "total_nodes": 125247,
-  "total_edges": 335444,
-  "total_transfers": 125646,
-  "layers": {
-    "road": {
-      "nodes": 62620,
-      "edges": 167783
-    },
-    "metro": {
-      "nodes": 7,
-      "edges": 8
-    },
-    "walk": {
-      "nodes": 62620,
-      "edges": 167653
-    }
+  "total_nodes": 125482,
+  "total_edges": 335604,
+  "total_transfers": 139098,
+  "nodes_by_layer": {
+    "road": 62620,
+    "metro": 242,
+    "walk": 62620
   },
-  "transfer_types": {
-    "mode_switch": 125240,
-    "metro_entry": 203,
-    "metro_exit": 203
-  },
-  "modes": {
+  "edges_by_mode": {
     "car": 167783,
-    "walk": 167653,
-    "metro": 8
+    "metro": 168,
+    "walk": 167653
+  },
+  "coordinate_bounds": {
+    "min_x": 76.9640828,
+    "max_x": 77.3218395,
+    "min_y": 28.4807352,
+    "max_y": 28.8464766
+  },
+  "edge_statistics": {
+    "avg_length_m": 63.36737260320614,
+    "total_length_km": 21266.343715126397,
+    "avg_speed_mps": 4.8870437479887014,
+    "avg_travel_time_s": 26.108452383582318
+  },
+  "timeseries": {
+    "total_records": 96653952,
+    "unique_edges": 335604,
+    "time_range": {
+      "start": "2025-11-25 00:00:00",
+      "end": "2025-11-25 23:55:00"
+    }
   }
 }
