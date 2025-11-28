@@ -68,18 +68,25 @@ urban-traffic/
 │   ├── data_processing/
 │   │   ├── convert_road_layer.py
 │   │   ├── extract_metro_layer.py
+│   │   ├── extract_real_metro_data.py  # NEW: Real OSM extraction
 │   │   ├── create_walking_layer.py
 │   │   ├── create_transfers.py
 │   │   ├── merge_all_layers.py
-│   │   └── generate_multimodal_traffic.py
+│   │   ├── generate_multimodal_traffic.py
+│   │   ├── generate_real_timeseries.py  # NEW: Enhanced time-series
+│   │   └── validate_network.py          # NEW: Network validation
 │   ├── routing/
 │   │   ├── graph_loader.py
 │   │   └── multimodal_dijkstra.py
+│   ├── evaluation/                      # NEW: Evaluation module
+│   │   ├── __init__.py
+│   │   └── evaluate_routing.py
 │   ├── visualization/
 │   │   └── plot_network.py
 │   └── utils/
 │       ├── haversine.py
 │       └── config.py
+├── output/                     # Evaluation results & plots
 ├── build_multilayer_network.py  # Main pipeline script
 └── README.md
 ```
@@ -91,20 +98,39 @@ urban-traffic/
 Run the complete pipeline to process raw data and build the multi-layer network:
 
 ```bash
+# Using synthetic metro data (default)
 python build_multilayer_network.py
+
+# Using REAL Delhi Metro data from OpenStreetMap
+python build_multilayer_network.py --real-metro
+
+# With enhanced time-series generation
+python build_multilayer_network.py --real-metro --enhanced-timeseries
 ```
+
+**Command-line options:**
+- `--real-metro`: Extract real Delhi Metro stations from OpenStreetMap
+- `--place "Delhi, India"`: Specify place for OSM extraction
+- `--enhanced-timeseries`: Use enhanced time-series with realistic patterns
 
 This will:
 1. Convert road network to multi-layer format
-2. Create synthetic metro network
+2. Create metro network (synthetic or real from OSM)
 3. Generate walking layer
 4. Create transfer connections
 5. Merge all layers
 6. Generate time-series traffic data
+7. Validate the network (optional)
 
 **Output:** Complete multi-layer network in `data/final/`
 
-### 2. Run Multimodal Routing
+### 2. Validate Network
+
+```bash
+python src/data_processing/validate_network.py --data-dir data/final --summary
+```
+
+### 3. Run Multimodal Routing
 
 ```python
 from src.routing.graph_loader import MultiLayerGraph
@@ -297,14 +323,37 @@ Time-of-day multipliers vary by mode:
 python src/data_processing/convert_road_layer.py
 ```
 
-### Create Metro Network Only
+### Create Metro Network (Synthetic or Real)
 ```bash
+# Synthetic metro (default)
 python src/data_processing/extract_metro_layer.py
+
+# Real metro from OpenStreetMap
+python src/data_processing/extract_metro_layer.py --real --place "Delhi, India"
 ```
 
-### Generate Traffic Data Only
+### Extract Real Delhi Metro Data Only
 ```bash
+python src/data_processing/extract_real_metro_data.py
+```
+
+### Generate Traffic Data
+```bash
+# Standard time-series
 python src/data_processing/generate_multimodal_traffic.py
+
+# Enhanced time-series with realistic patterns
+python src/data_processing/generate_real_timeseries.py
+```
+
+### Validate Network
+```bash
+python src/data_processing/validate_network.py --data-dir data/final --summary
+```
+
+### Run Routing Evaluation
+```bash
+python src/evaluation/evaluate_routing.py
 ```
 
 ## Troubleshooting

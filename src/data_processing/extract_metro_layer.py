@@ -1,6 +1,10 @@
 """
 Extract metro/subway network from OpenStreetMap or create synthetic metro layer.
 This forms Layer 1 (metro network) of the multi-layer graph.
+
+Supports two modes:
+1. Synthetic mode: Creates a simplified metro network for testing
+2. Real mode: Extracts actual Delhi Metro data from OpenStreetMap
 """
 
 import pandas as pd
@@ -12,6 +16,7 @@ import sys
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 
 def haversine_distance(lat1, lon1, lat2, lon2):
     """
@@ -32,6 +37,40 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     c = 2 * atan2(sqrt(a), sqrt(1-a))
     
     return R * c
+
+
+def create_metro_network(output_dir, use_real_data=False, place_name='Delhi, India'):
+    """
+    Create metro network - either synthetic or from real OSM data.
+    
+    Parameters:
+    -----------
+    output_dir : str
+        Directory for output files
+    use_real_data : bool
+        If True, extract real data from OpenStreetMap
+        If False, use synthetic data (default)
+    place_name : str
+        Place name for OSM extraction (only used if use_real_data=True)
+        
+    Returns:
+    --------
+    tuple : (metro_nodes_df, metro_edges_df)
+    """
+    
+    if use_real_data:
+        try:
+            from data_processing.extract_real_metro_data import extract_real_metro
+            print("Extracting real Delhi Metro data from OpenStreetMap...")
+            return extract_real_metro(place_name=place_name, output_dir=output_dir)
+        except ImportError as e:
+            print(f"Warning: Could not import real metro extraction module: {e}")
+            print("Falling back to synthetic metro data...")
+        except Exception as e:
+            print(f"Warning: Error extracting real metro data: {e}")
+            print("Falling back to synthetic metro data...")
+    
+    return create_synthetic_metro(output_dir)
 
 
 def create_synthetic_metro(output_dir):
@@ -145,11 +184,28 @@ def create_synthetic_metro(output_dir):
 
 
 if __name__ == "__main__":
-    # Example usage
-    metro_nodes, metro_edges = create_synthetic_metro(
-        output_dir='data/multilayer'
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Extract or create metro network')
+    parser.add_argument('--real', action='store_true', 
+                        help='Extract real data from OpenStreetMap')
+    parser.add_argument('--place', default='Delhi, India',
+                        help='Place name for OSM extraction')
+    parser.add_argument('--output-dir', default='data/multilayer',
+                        help='Output directory')
+    
+    args = parser.parse_args()
+    
+    # Create metro network
+    metro_nodes, metro_edges = create_metro_network(
+        output_dir=args.output_dir,
+        use_real_data=args.real,
+        place_name=args.place
     )
     
-    print("\nMetro network extraction complete!")
-    print(f"Stations: {len(metro_nodes)}")
-    print(f"Connections: {len(metro_edges)}")
+    if metro_nodes is not None:
+        print("\nMetro network extraction complete!")
+        print(f"Stations: {len(metro_nodes)}")
+        print(f"Connections: {len(metro_edges)}")
+    else:
+        print("\nFailed to create metro network")

@@ -1,12 +1,18 @@
 """
 Multimodal Dijkstra's algorithm for multi-layer transportation networks.
 Finds optimal routes considering multiple transport modes and transfers.
+
+Features:
+- Time-dependent routing with congestion patterns
+- Mode preferences and transfer penalties
+- Route formatting and comparison utilities
 """
 
 import networkx as nx
 import pandas as pd
 from typing import List, Dict, Tuple, Optional
 import heapq
+import json
 
 
 class MultimodalRouter:
@@ -28,6 +34,7 @@ class MultimodalRouter:
         self.mlg = multilayer_graph
         self.graph = None
         self.current_timestamp = None
+        self.nodes = multilayer_graph.nodes if hasattr(multilayer_graph, 'nodes') else None
     
     def prepare_graph(self, timestamp=None, transfer_penalty=0):
         """
@@ -343,6 +350,112 @@ class MultimodalRouter:
             'single_path': single_path,
             'multimodal_route': multi_route
         }
+    
+    def format_route(self, route):
+        """
+        Format route for display with nice formatting.
+        
+        Parameters:
+        -----------
+        route : dict
+            Route result from find_route
+            
+        Returns:
+        --------
+        str : Formatted route description
+        """
+        
+        if not route:
+            return "No route found"
+        
+        output = []
+        output.append(f"\n{'='*70}")
+        output.append(f"MULTIMODAL ROUTE")
+        output.append(f"{'='*70}")
+        output.append(f"Total time: {route['total_time_s']/60:.1f} minutes ({route['total_time_s']:.0f} seconds)")
+        output.append(f"Total distance: {route['total_distance_m']/1000:.2f} km")
+        output.append(f"Number of transfers: {route['num_transfers']}")
+        
+        if route.get('timestamp'):
+            output.append(f"Departure: {route['timestamp']}")
+        
+        output.append(f"\n{'-'*70}")
+        output.append(f"ROUTE SEGMENTS")
+        output.append(f"{'-'*70}\n")
+        
+        mode_emojis = {
+            'car': '🚗',
+            'metro': '🚇',
+            'walk': '🚶',
+            'transfer': '🔄',
+            'auto': '🛺'
+        }
+        
+        for i, seg in enumerate(route['segments'], 1):
+            mode = seg['mode']
+            emoji = mode_emojis.get(mode, '→')
+            
+            output.append(f"{i}. {emoji} {mode.upper()}")
+            output.append(f"   Duration: {seg['time_s']/60:.1f} min")
+            output.append(f"   Distance: {seg['distance_m']:.0f} m")
+            output.append(f"   Nodes: {len(seg['nodes'])}")
+            output.append("")
+        
+        # Show transfers if any
+        if route['transfers']:
+            output.append(f"{'-'*70}")
+            output.append("TRANSFERS")
+            output.append(f"{'-'*70}\n")
+            
+            for i, transfer in enumerate(route['transfers'], 1):
+                layer_names = {0: 'Road', 1: 'Metro', 2: 'Walk'}
+                from_layer = layer_names.get(transfer['from_layer'], f"Layer {transfer['from_layer']}")
+                to_layer = layer_names.get(transfer['to_layer'], f"Layer {transfer['to_layer']}")
+                
+                output.append(f"{i}. {from_layer} → {to_layer}")
+                output.append(f"   Type: {transfer['transfer_type']}")
+                output.append(f"   Time: {transfer['time_s']/60:.1f} min")
+                output.append("")
+        
+        output.append(f"{'='*70}")
+        
+        return '\n'.join(output)
+    
+    def get_route_summary(self, route):
+        """
+        Get a compact summary of the route.
+        
+        Parameters:
+        -----------
+        route : dict
+            Route result from find_route
+            
+        Returns:
+        --------
+        dict : Compact summary
+        """
+        
+        if not route:
+            return None
+        
+        # Count segments by mode
+        mode_segments = {}
+        for seg in route['segments']:
+            mode = seg['mode']
+            if mode not in mode_segments:
+                mode_segments[mode] = {'count': 0, 'time_s': 0, 'distance_m': 0}
+            mode_segments[mode]['count'] += 1
+            mode_segments[mode]['time_s'] += seg['time_s']
+            mode_segments[mode]['distance_m'] += seg['distance_m']
+        
+        return {
+            'total_time_min': route['total_time_s'] / 60,
+            'total_distance_km': route['total_distance_m'] / 1000,
+            'num_transfers': route['num_transfers'],
+            'modes_used': list(mode_segments.keys()),
+            'mode_breakdown': mode_segments,
+            'path_length': len(route['path'])
+        }
 
 
 if __name__ == "__main__":
@@ -372,6 +485,13 @@ if __name__ == "__main__":
     )
     
     if route:
-        print("\n Route segments:")
-        for i, seg in enumerate(route['segments']):
-            print(f"  {i+1}. {seg['mode']}: {seg['time_s']/60:.1f} min, {seg['distance_m']/1000:.2f} km")
+        # Print formatted route
+        print(router.format_route(route))
+        
+        # Print summary
+        summary = router.get_route_summary(route)
+        print("\nRoute Summary:")
+        print(f"  Total time: {summary['total_time_min']:.1f} min")
+        print(f"  Total distance: {summary['total_distance_km']:.2f} km")
+        print(f"  Modes used: {', '.join(summary['modes_used'])}")
+        print(f"  Transfers: {summary['num_transfers']}")
