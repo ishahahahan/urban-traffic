@@ -1,0 +1,8 @@
+node_id,layer,osmid,x,y,node_type,name,properties
+metro_0,1,,77.2088,28.6329,metro_station,Rajiv Chowk,"{""line"": ""Blue"", ""interchange"": true, ""synthetic"": true}"
+metro_1,1,,77.2183,28.6304,metro_station,Barakhamba Road,"{""line"": ""Blue"", ""interchange"": false, ""synthetic"": true}"
+metro_2,1,,77.2346,28.6261,metro_station,Mandi House,"{""line"": ""Blue"", ""interchange"": true, ""synthetic"": true}"
+metro_3,1,,77.2079,28.6217,metro_station,Patel Chowk,"{""line"": ""Yellow"", ""interchange"": false, ""synthetic"": true}"
+metro_4,1,,77.2095,28.6157,metro_station,Central Secretariat,"{""line"": ""Yellow"", ""interchange"": true, ""synthetic"": true}"
+metro_5,1,,77.2025,28.6433,metro_station,Shivaji Stadium,"{""line"": ""Orange"", ""interchange"": false, ""synthetic"": true}"
+metro_6,1,,77.1959,28.6405,metro_station,Ramakrishna Ashram Marg,"{""line"": ""Blue"", ""interchange"": false, ""synthetic"": true}"

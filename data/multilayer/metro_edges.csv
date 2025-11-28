@@ -1,0 +1,9 @@
+edge_id,layer,u,v,key,length_m,mode,speed_mps,travel_time_s,edge_type,properties
+metro_0,1,metro_0,metro_1,0,967.9559085568043,metro,16.67,58.065741365135224,metro_segment,"{""line"": ""Blue"", ""frequency_min"": 5, ""synthetic"": true}"
+metro_1,1,metro_1,metro_0,0,967.9559085568043,metro,16.67,58.065741365135224,metro_segment,"{""line"": ""Blue"", ""frequency_min"": 5, ""synthetic"": true}"
+metro_2,1,metro_1,metro_2,0,1661.194438147805,metro,16.67,99.65173594167995,metro_segment,"{""line"": ""Blue"", ""frequency_min"": 5, ""synthetic"": true}"
+metro_3,1,metro_2,metro_1,0,1661.194438147805,metro,16.67,99.65173594167995,metro_segment,"{""line"": ""Blue"", ""frequency_min"": 5, ""synthetic"": true}"
+metro_4,1,metro_2,metro_6,0,4102.367277925546,metro,16.67,246.09281811191033,metro_segment,"{""line"": ""Blue"", ""frequency_min"": 5, ""synthetic"": true}"
+metro_5,1,metro_6,metro_2,0,4102.367277925546,metro,16.67,246.09281811191033,metro_segment,"{""line"": ""Blue"", ""frequency_min"": 5, ""synthetic"": true}"
+metro_6,1,metro_3,metro_4,0,685.2051532553853,metro,16.67,41.104088377647585,metro_segment,"{""line"": ""Yellow"", ""frequency_min"": 5, ""synthetic"": true}"
+metro_7,1,metro_4,metro_3,0,685.2051532553853,metro,16.67,41.104088377647585,metro_segment,"{""line"": ""Yellow"", ""frequency_min"": 5, ""synthetic"": true}"
