@@ -1,0 +1,452 @@
+{
+  "road_4026": {
+    "google_distance_m": 4556,
+    "google_duration_s": 285,
+    "google_speed_mps": 15.985964912280702,
+    "google_speed_kmh": 57.549473684210525,
+    "congestion_ratio": 0.04014598540145986,
+    "osm_length_m": 4465.4495684510985,
+    "osm_speed_mps": 33.333333333333336
+  },
+  "road_102401": {
+    "google_distance_m": 4409,
+    "google_duration_s": 242,
+    "google_speed_mps": 18.21900826446281,
+    "google_speed_kmh": 65.58842975206612,
+    "congestion_ratio": 0.004149377593360981,
+    "osm_length_m": 4335.297295804344,
+    "osm_speed_mps": 33.333333333333336
+  },
+  "road_115979": {
+    "google_distance_m": 6592,
+    "google_duration_s": 601,
+    "google_speed_mps": 10.968386023294508,
+    "google_speed_kmh": 39.48618968386023,
+    "congestion_ratio": -0.12390670553935856,
+    "osm_length_m": 2699.267185557116,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_118491": {
+    "google_distance_m": 5688,
+    "google_duration_s": 644,
+    "google_speed_mps": 8.832298136645962,
+    "google_speed_kmh": 31.796273291925463,
+    "congestion_ratio": -0.1515151515151515,
+    "osm_length_m": 2699.267185557116,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_27450": {
+    "google_distance_m": 2375,
+    "google_duration_s": 189,
+    "google_speed_mps": 12.566137566137566,
+    "google_speed_kmh": 45.23809523809524,
+    "congestion_ratio": -0.06896551724137934,
+    "osm_length_m": 2349.653423134842,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_28308": {
+    "google_distance_m": 2373,
+    "google_duration_s": 197,
+    "google_speed_mps": 12.045685279187817,
+    "google_speed_kmh": 43.36446700507614,
+    "congestion_ratio": -0.1045454545454545,
+    "osm_length_m": 2346.5094090320385,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_19072": {
+    "google_distance_m": 2618,
+    "google_duration_s": 190,
+    "google_speed_mps": 13.778947368421052,
+    "google_speed_kmh": 49.60421052631579,
+    "congestion_ratio": 0.005291005291005346,
+    "osm_length_m": 2315.241854876432,
+    "osm_speed_mps": 22.22222222222222
+  },
+  "road_29267": {
+    "google_distance_m": 2680,
+    "google_duration_s": 342,
+    "google_speed_mps": 7.83625730994152,
+    "google_speed_kmh": 28.210526315789473,
+    "congestion_ratio": -0.09283819628647216,
+    "osm_length_m": 2284.807814826707,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_21186": {
+    "google_distance_m": 2016,
+    "google_duration_s": 147,
+    "google_speed_mps": 13.714285714285714,
+    "google_speed_kmh": 49.37142857142857,
+    "congestion_ratio": -0.08125000000000004,
+    "osm_length_m": 1955.09334674524,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_166455": {
+    "google_distance_m": 2066,
+    "google_duration_s": 151,
+    "google_speed_mps": 13.682119205298013,
+    "google_speed_kmh": 49.25562913907285,
+    "congestion_ratio": -0.12209302325581395,
+    "osm_length_m": 1940.0978456245623,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_23671": {
+    "google_distance_m": 2352,
+    "google_duration_s": 309,
+    "google_speed_mps": 7.611650485436893,
+    "google_speed_kmh": 27.401941747572817,
+    "congestion_ratio": 0.013114754098360715,
+    "osm_length_m": 1897.9203738849567,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_3758": {
+    "google_distance_m": 1988,
+    "google_duration_s": 328,
+    "google_speed_mps": 6.060975609756097,
+    "google_speed_kmh": 21.819512195121952,
+    "congestion_ratio": -0.08635097493036215,
+    "osm_length_m": 1897.9203738849567,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_164197": {
+    "google_distance_m": 1885,
+    "google_duration_s": 124,
+    "google_speed_mps": 15.201612903225806,
+    "google_speed_kmh": 54.725806451612904,
+    "congestion_ratio": -0.10144927536231885,
+    "osm_length_m": 1835.511184073228,
+    "osm_speed_mps": 22.22222222222222
+  },
+  "road_73725": {
+    "google_distance_m": 1914,
+    "google_duration_s": 124,
+    "google_speed_mps": 15.435483870967742,
+    "google_speed_kmh": 55.56774193548387,
+    "congestion_ratio": -0.13888888888888884,
+    "osm_length_m": 1793.4430516777716,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_24295": {
+    "google_distance_m": 1732,
+    "google_duration_s": 159,
+    "google_speed_mps": 10.89308176100629,
+    "google_speed_kmh": 39.215094339622645,
+    "congestion_ratio": 0.08163265306122458,
+    "osm_length_m": 1711.6443548545842,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_10828": {
+    "google_distance_m": 1712,
+    "google_duration_s": 140,
+    "google_speed_mps": 12.228571428571428,
+    "google_speed_kmh": 44.02285714285714,
+    "congestion_ratio": -0.014084507042253502,
+    "osm_length_m": 1689.3206067382612,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_74920": {
+    "google_distance_m": 1859,
+    "google_duration_s": 138,
+    "google_speed_mps": 13.471014492753623,
+    "google_speed_kmh": 48.495652173913044,
+    "congestion_ratio": -0.1428571428571429,
+    "osm_length_m": 1615.3103351646084,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_1479": {
+    "google_distance_m": 1633,
+    "google_duration_s": 133,
+    "google_speed_mps": 12.278195488721805,
+    "google_speed_kmh": 44.2015037593985,
+    "congestion_ratio": -0.036231884057971064,
+    "osm_length_m": 1580.6188112747186,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_163853": {
+    "google_distance_m": 1598,
+    "google_duration_s": 131,
+    "google_speed_mps": 12.198473282442748,
+    "google_speed_kmh": 43.914503816793896,
+    "congestion_ratio": -0.10273972602739723,
+    "osm_length_m": 1570.5857810073228,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_142810": {
+    "google_distance_m": 1608,
+    "google_duration_s": 138,
+    "google_speed_mps": 11.652173913043478,
+    "google_speed_kmh": 41.947826086956525,
+    "congestion_ratio": -0.08609271523178808,
+    "osm_length_m": 1553.6909457582592,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_36696": {
+    "google_distance_m": 1592,
+    "google_duration_s": 128,
+    "google_speed_mps": 12.4375,
+    "google_speed_kmh": 44.775,
+    "congestion_ratio": -0.1466666666666666,
+    "osm_length_m": 1542.301125170245,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_116008": {
+    "google_distance_m": 3365,
+    "google_duration_s": 571,
+    "google_speed_mps": 5.893169877408056,
+    "google_speed_kmh": 21.215411558669,
+    "congestion_ratio": 0.4492385786802031,
+    "osm_length_m": 1531.9676327168986,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_104820": {
+    "google_distance_m": 2711,
+    "google_duration_s": 338,
+    "google_speed_mps": 8.020710059171599,
+    "google_speed_kmh": 28.874556213017755,
+    "congestion_ratio": -0.13994910941475824,
+    "osm_length_m": 1531.9676327168986,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_164195": {
+    "google_distance_m": 1536,
+    "google_duration_s": 106,
+    "google_speed_mps": 14.49056603773585,
+    "google_speed_kmh": 52.16603773584906,
+    "congestion_ratio": -0.036363636363636376,
+    "osm_length_m": 1517.0605019102825,
+    "osm_speed_mps": 22.22222222222222
+  },
+  "road_7": {
+    "google_distance_m": 1508,
+    "google_duration_s": 288,
+    "google_speed_mps": 5.236111111111111,
+    "google_speed_kmh": 18.849999999999998,
+    "congestion_ratio": 0.6457142857142857,
+    "osm_length_m": 1509.2228489141305,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_9904": {
+    "google_distance_m": 1526,
+    "google_duration_s": 107,
+    "google_speed_mps": 14.261682242990654,
+    "google_speed_kmh": 51.342056074766354,
+    "congestion_ratio": -0.10833333333333328,
+    "osm_length_m": 1496.300672386902,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_29375": {
+    "google_distance_m": 3307,
+    "google_duration_s": 315,
+    "google_speed_mps": 10.498412698412698,
+    "google_speed_kmh": 37.794285714285714,
+    "congestion_ratio": -0.16445623342175064,
+    "osm_length_m": 1495.1377817000473,
+    "osm_speed_mps": 33.333333333333336
+  },
+  "road_111519": {
+    "google_distance_m": 8853,
+    "google_duration_s": 829,
+    "google_speed_mps": 10.67913148371532,
+    "google_speed_kmh": 38.44487334137516,
+    "congestion_ratio": -0.03267211201866982,
+    "osm_length_m": 1493.3745955622535,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_128884": {
+    "google_distance_m": 1839,
+    "google_duration_s": 199,
+    "google_speed_mps": 9.241206030150753,
+    "google_speed_kmh": 33.268341708542714,
+    "congestion_ratio": -0.1076233183856502,
+    "osm_length_m": 1493.3745955622535,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_41623": {
+    "google_distance_m": 1522,
+    "google_duration_s": 111,
+    "google_speed_mps": 13.711711711711711,
+    "google_speed_kmh": 49.362162162162164,
+    "congestion_ratio": -0.008928571428571397,
+    "osm_length_m": 1491.3758998938326,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_73799": {
+    "google_distance_m": 1553,
+    "google_duration_s": 310,
+    "google_speed_mps": 5.009677419354839,
+    "google_speed_kmh": 18.03483870967742,
+    "congestion_ratio": 0.0,
+    "osm_length_m": 1451.919251726257,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_111522": {
+    "google_distance_m": 1553,
+    "google_duration_s": 317,
+    "google_speed_mps": 4.899053627760252,
+    "google_speed_kmh": 17.636593059936907,
+    "congestion_ratio": 0.0,
+    "osm_length_m": 1451.919251726257,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_29343": {
+    "google_distance_m": 5588,
+    "google_duration_s": 452,
+    "google_speed_mps": 12.36283185840708,
+    "google_speed_kmh": 44.50619469026549,
+    "congestion_ratio": -0.08686868686868687,
+    "osm_length_m": 1448.519288106706,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_68243": {
+    "google_distance_m": 1442,
+    "google_duration_s": 116,
+    "google_speed_mps": 12.431034482758621,
+    "google_speed_kmh": 44.751724137931035,
+    "congestion_ratio": -0.15328467153284675,
+    "osm_length_m": 1430.528549346563,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_10823": {
+    "google_distance_m": 1444,
+    "google_duration_s": 130,
+    "google_speed_mps": 11.107692307692307,
+    "google_speed_kmh": 39.987692307692306,
+    "congestion_ratio": 0.09243697478991586,
+    "osm_length_m": 1401.1809701476627,
+    "osm_speed_mps": 16.666666666666668
+  },
+  "road_805": {
+    "google_distance_m": 1584,
+    "google_duration_s": 174,
+    "google_speed_mps": 9.10344827586207,
+    "google_speed_kmh": 32.77241379310345,
+    "congestion_ratio": -0.13432835820895528,
+    "osm_length_m": 1397.8526257226845,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_2469": {
+    "google_distance_m": 2186,
+    "google_duration_s": 177,
+    "google_speed_mps": 12.350282485875706,
+    "google_speed_kmh": 44.461016949152544,
+    "congestion_ratio": -0.19909502262443435,
+    "osm_length_m": 1385.7860074395735,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_131569": {
+    "google_distance_m": 8672,
+    "google_duration_s": 863,
+    "google_speed_mps": 10.048667439165701,
+    "google_speed_kmh": 36.17520278099653,
+    "congestion_ratio": -0.017084282460136713,
+    "osm_length_m": 1385.7860074395735,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_757": {
+    "google_distance_m": 1395,
+    "google_duration_s": 167,
+    "google_speed_mps": 8.353293413173652,
+    "google_speed_kmh": 30.07185628742515,
+    "congestion_ratio": 0.4152542372881356,
+    "osm_length_m": 1384.2061055141414,
+    "osm_speed_mps": 22.22222222222222
+  },
+  "road_90898": {
+    "google_distance_m": 1402,
+    "google_duration_s": 135,
+    "google_speed_mps": 10.385185185185184,
+    "google_speed_kmh": 37.38666666666666,
+    "congestion_ratio": -0.09395973154362414,
+    "osm_length_m": 1376.1527141658046,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_103360": {
+    "google_distance_m": 11103,
+    "google_duration_s": 847,
+    "google_speed_mps": 13.108618654073199,
+    "google_speed_kmh": 47.191027154663516,
+    "congestion_ratio": -0.09411764705882353,
+    "osm_length_m": 1363.0773264497443,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_103365": {
+    "google_distance_m": 1474,
+    "google_duration_s": 109,
+    "google_speed_mps": 13.522935779816514,
+    "google_speed_kmh": 48.68256880733945,
+    "congestion_ratio": -0.11382113821138207,
+    "osm_length_m": 1363.0773264497443,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_82209": {
+    "google_distance_m": 1383,
+    "google_duration_s": 81,
+    "google_speed_mps": 17.074074074074073,
+    "google_speed_kmh": 61.46666666666666,
+    "congestion_ratio": 0.0,
+    "osm_length_m": 1361.1980300440243,
+    "osm_speed_mps": 33.333333333333336
+  },
+  "road_102472": {
+    "google_distance_m": 1320,
+    "google_duration_s": 85,
+    "google_speed_mps": 15.529411764705882,
+    "google_speed_kmh": 55.90588235294118,
+    "congestion_ratio": -0.0957446808510638,
+    "osm_length_m": 1319.736088496207,
+    "osm_speed_mps": 11.11111111111111
+  },
+  "road_102406": {
+    "google_distance_m": 1316,
+    "google_duration_s": 91,
+    "google_speed_mps": 14.461538461538462,
+    "google_speed_kmh": 52.06153846153846,
+    "congestion_ratio": 0.011111111111111072,
+    "osm_length_m": 1315.362821935342,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_82161": {
+    "google_distance_m": 1338,
+    "google_duration_s": 90,
+    "google_speed_mps": 14.866666666666667,
+    "google_speed_kmh": 53.52,
+    "congestion_ratio": -0.13461538461538458,
+    "osm_length_m": 1312.1947867967394,
+    "osm_speed_mps": 19.444444444444443
+  },
+  "road_155281": {
+    "google_distance_m": 1320,
+    "google_duration_s": 101,
+    "google_speed_mps": 13.069306930693068,
+    "google_speed_kmh": 47.04950495049505,
+    "congestion_ratio": -0.1293103448275862,
+    "osm_length_m": 1311.8039405694165,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_3771": {
+    "google_distance_m": 2274,
+    "google_duration_s": 237,
+    "google_speed_mps": 9.594936708860759,
+    "google_speed_kmh": 34.54177215189873,
+    "congestion_ratio": -0.2946428571428571,
+    "osm_length_m": 1285.8304705241885,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_3804": {
+    "google_distance_m": 1980,
+    "google_duration_s": 173,
+    "google_speed_mps": 11.445086705202312,
+    "google_speed_kmh": 41.202312138728324,
+    "congestion_ratio": -0.187793427230047,
+    "osm_length_m": 1285.8304705241885,
+    "osm_speed_mps": 8.333333333333334
+  },
+  "road_9625": {
+    "google_distance_m": 1301,
+    "google_duration_s": 107,
+    "google_speed_mps": 12.158878504672897,
+    "google_speed_kmh": 43.77196261682243,
+    "congestion_ratio": 0.05940594059405946,
+    "osm_length_m": 1282.6724519359434,
+    "osm_speed_mps": 16.666666666666668
+  }
+}
