@@ -206,6 +206,39 @@ DELHI_METRO_STATIONS = [
     {'name': 'New Delhi', 'x': 77.2090, 'y': 28.6425, 'line': 'Yellow', 'interchange': True},
 ]
 
+# HERE Traffic API Configuration
+HERE_CONFIG = {
+    # Delhi bounding box for traffic queries
+    'bbox': {
+        'west': 76.8,
+        'south': 28.4,
+        'east': 77.5,
+        'north': 28.9
+    },
+    
+    # Matching parameters (OSM edges to HERE segments)
+    'max_match_distance_m': 150,  # Maximum distance for edge matching
+    'max_bearing_diff_deg': 45,   # Maximum bearing difference for matching
+    
+    # Traffic data settings
+    'cache_ttl_hours': 1,        # Cache TTL for real-time data
+    'historical_slots': 168,      # 7 days × 24 hours
+    
+    # Fallback behavior when HERE data unavailable
+    'fallback_to_osm': True,     # Use OSM speeds when no HERE match
+    
+    # Speed adjustment (HERE speeds tend to be optimistic)
+    'speed_adjustment_factor': 0.9,  # Reduce HERE speeds by 10%
+}
+
+# Traffic data source configuration
+TRAFFIC_DATA_SOURCE = {
+    'mode': 'here',  # 'here', 'synthetic', or 'hybrid'
+    'here_patterns_file': 'data/here/historical_patterns.parquet',
+    'here_mapping_file': 'data/here/edge_here_mapping.csv',
+    'synthetic_timeseries': 'data/final/multimodal_timeseries.parquet'
+}
+
 # File paths
 PATHS = {
     'raw_nodes': 'data/raw/nodes.csv',
@@ -213,6 +246,7 @@ PATHS = {
     'multilayer_dir': 'data/multilayer',
     'final_dir': 'data/final',
     'output_dir': 'output',
+    'here_dir': 'data/here',
 }
 
 # OSM extraction settings

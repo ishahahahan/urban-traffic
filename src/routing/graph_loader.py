@@ -1,20 +1,24 @@
 """
 Load and manage multi-layer transportation network graph.
 Provides unified interface for accessing nodes, edges, and transfers.
+Supports both synthetic timeseries and HERE Traffic API historical patterns.
 """
 
 import pandas as pd
 import networkx as nx
 import os
+from pathlib import Path
 
 
 class MultiLayerGraph:
     """
     Manages multi-layer transportation network.
     Each layer is a separate NetworkX graph connected via transfer edges.
+    Supports HERE Traffic API historical patterns for time-dependent routing.
     """
     
-    def __init__(self, nodes_file, edges_file, transfers_file, timeseries_file=None):
+    def __init__(self, nodes_file, edges_file, transfers_file, 
+                 timeseries_file=None, here_patterns_file=None):
         """
         Initialize multi-layer graph.
         
@@ -27,7 +31,9 @@ class MultiLayerGraph:
         transfers_file : str
             Path to transfers_final.csv
         timeseries_file : str, optional
-            Path to multimodal_timeseries.parquet
+            Path to multimodal_timeseries.parquet (synthetic data)
+        here_patterns_file : str, optional
+            Path to HERE historical_patterns.parquet
         """
         
         print("Loading multi-layer network...")
@@ -41,11 +47,27 @@ class MultiLayerGraph:
         print(f"  Edges: {len(self.edges_df):,}")
         print(f"  Transfers: {len(self.transfers_df):,}")
         
-        # Load timeseries if provided
+        # Load synthetic timeseries if provided
         self.timeseries_df = None
         if timeseries_file and os.path.exists(timeseries_file):
             self.timeseries_df = pd.read_parquet(timeseries_file)
-            print(f"  Time-series records: {len(self.timeseries_df):,}")
+            print(f"  Synthetic time-series records: {len(self.timeseries_df):,}")
+        
+        # Load HERE historical patterns if provided
+        self.here_patterns_df = None
+        self.traffic_source = 'static'  # 'static', 'synthetic', or 'here'
+        
+        if here_patterns_file and os.path.exists(here_patterns_file):
+            self.here_patterns_df = pd.read_parquet(here_patterns_file)
+            self.traffic_source = 'here'
+            print(f"  HERE historical patterns: {len(self.here_patterns_df):,}")
+            
+            # Create lookup index for fast access
+            self._build_here_index()
+        elif self.timeseries_df is not None:
+            self.traffic_source = 'synthetic'
+        
+        print(f"  Traffic data source: {self.traffic_source}")
         
         # Create separate graphs for each layer
         self.layers = {}
@@ -260,23 +282,213 @@ class MultiLayerGraph:
         
         # Return closest
         return nodes.loc[nodes['dist'].idxmin(), 'node_id']
+    
+    def _build_here_index(self):
+        """
+        Build lookup index for HERE patterns for fast access.
+        Creates dictionary: (edge_id, day, hour) -> travel_time_s
+        """
+        print("  Building HERE patterns index...")
+        
+        self.here_index = {}
+        
+        for _, row in self.here_patterns_df.iterrows():
+            key = (row['edge_id'], row['day_of_week'], row['hour'])
+            self.here_index[key] = {
+                'travel_time_s': row['travel_time_s'],
+                'speed_mps': row['speed_mps'],
+                'jam_factor': row['jam_factor'],
+                'congestion_ratio': row.get('congestion_ratio', 0)
+            }
+        
+        print(f"  Indexed {len(self.here_index):,} HERE pattern entries")
+    
+    def get_travel_times_for_datetime(self, dt):
+        """
+        Get travel times for all edges at a specific datetime using HERE patterns.
+        
+        Parameters:
+        -----------
+        dt : datetime or pd.Timestamp
+            Datetime to query
+            
+        Returns:
+        --------
+        dict : {edge_id: travel_time_s}
+        """
+        if self.traffic_source == 'here' and self.here_patterns_df is not None:
+            return self._get_here_travel_times(dt)
+        elif self.traffic_source == 'synthetic' and self.timeseries_df is not None:
+            return self.get_travel_times_at_time(dt)
+        else:
+            # Return static travel times from edges
+            return dict(zip(self.edges_df['edge_id'], self.edges_df['travel_time_s']))
+    
+    def _get_here_travel_times(self, dt):
+        """
+        Get travel times from HERE historical patterns.
+        
+        Parameters:
+        -----------
+        dt : datetime or pd.Timestamp
+            Datetime to query
+            
+        Returns:
+        --------
+        dict : {edge_id: travel_time_s}
+        """
+        if isinstance(dt, str):
+            dt = pd.Timestamp(dt)
+        
+        # Get day of week and hour
+        day_map = {0: 'MON', 1: 'TUE', 2: 'WED', 3: 'THU', 4: 'FRI', 5: 'SAT', 6: 'SUN'}
+        # Handle both datetime.datetime and pd.Timestamp
+        weekday = dt.weekday() if hasattr(dt, 'weekday') else dt.dayofweek
+        day = day_map[weekday]
+        hour = dt.hour
+        
+        travel_times = {}
+        
+        # Use index for fast lookup
+        if hasattr(self, 'here_index'):
+            for edge_id in self.edges_df['edge_id'].unique():
+                key = (edge_id, day, hour)
+                if key in self.here_index:
+                    travel_times[edge_id] = self.here_index[key]['travel_time_s']
+        else:
+            # Fallback to DataFrame filtering (slower)
+            mask = (self.here_patterns_df['day_of_week'] == day) & \
+                   (self.here_patterns_df['hour'] == hour)
+            snapshot = self.here_patterns_df[mask]
+            travel_times = dict(zip(snapshot['edge_id'], snapshot['travel_time_s']))
+        
+        return travel_times
+    
+    def get_traffic_info_at_time(self, dt, edge_id):
+        """
+        Get detailed traffic info for a specific edge at a specific time.
+        
+        Parameters:
+        -----------
+        dt : datetime or pd.Timestamp
+            Datetime to query
+        edge_id : str
+            Edge ID
+            
+        Returns:
+        --------
+        dict : Traffic info including speed, jam_factor, travel_time
+        """
+        if isinstance(dt, str):
+            dt = pd.Timestamp(dt)
+        
+        day_map = {0: 'MON', 1: 'TUE', 2: 'WED', 3: 'THU', 4: 'FRI', 5: 'SAT', 6: 'SUN'}
+        weekday = dt.weekday() if hasattr(dt, 'weekday') else dt.dayofweek
+        day = day_map[weekday]
+        hour = dt.hour
+        
+        # Default info from edges
+        edge_row = self.edges_df[self.edges_df['edge_id'] == edge_id]
+        if len(edge_row) == 0:
+            return None
+        
+        default_info = {
+            'edge_id': edge_id,
+            'travel_time_s': edge_row.iloc[0]['travel_time_s'],
+            'speed_mps': edge_row.iloc[0]['speed_mps'],
+            'jam_factor': 0,
+            'congestion_ratio': 0,
+            'source': 'static'
+        }
+        
+        # Try to get HERE data
+        if self.traffic_source == 'here' and hasattr(self, 'here_index'):
+            key = (edge_id, day, hour)
+            if key in self.here_index:
+                info = self.here_index[key].copy()
+                info['edge_id'] = edge_id
+                info['source'] = 'here'
+                return info
+        
+        return default_info
+    
+    def get_congestion_summary(self, dt):
+        """
+        Get network-wide congestion summary for a datetime.
+        
+        Parameters:
+        -----------
+        dt : datetime or pd.Timestamp
+            Datetime to query
+            
+        Returns:
+        --------
+        dict : Congestion summary statistics
+        """
+        if isinstance(dt, str):
+            dt = pd.Timestamp(dt)
+        
+        day_map = {0: 'MON', 1: 'TUE', 2: 'WED', 3: 'THU', 4: 'FRI', 5: 'SAT', 6: 'SUN'}
+        weekday = dt.weekday() if hasattr(dt, 'weekday') else dt.dayofweek
+        day = day_map[weekday]
+        hour = dt.hour
+        
+        if self.traffic_source != 'here' or self.here_patterns_df is None:
+            return {'source': 'static', 'message': 'No historical data available'}
+        
+        # Filter patterns for this time
+        mask = (self.here_patterns_df['day_of_week'] == day) & \
+               (self.here_patterns_df['hour'] == hour)
+        snapshot = self.here_patterns_df[mask]
+        
+        if len(snapshot) == 0:
+            return {'source': 'here', 'message': 'No data for this time slot'}
+        
+        return {
+            'source': 'here',
+            'day': day,
+            'hour': hour,
+            'edges_count': len(snapshot),
+            'avg_speed_kmh': snapshot['speed_kmh'].mean(),
+            'avg_jam_factor': snapshot['jam_factor'].mean(),
+            'avg_congestion_pct': snapshot['congestion_ratio'].mean() * 100,
+            'max_jam_factor': snapshot['jam_factor'].max(),
+            'highly_congested_edges': len(snapshot[snapshot['jam_factor'] > 5]),
+            'free_flow_edges': len(snapshot[snapshot['jam_factor'] < 1])
+        }
 
 
 if __name__ == "__main__":
     # Example usage
+    from pathlib import Path
+    
+    base_path = Path(__file__).parent.parent.parent
+    
+    # Check for HERE patterns
+    here_patterns = base_path / 'data' / 'here' / 'historical_patterns.parquet'
+    
     mlg = MultiLayerGraph(
-        nodes_file='data/final/nodes_final.csv',
-        edges_file='data/final/edges_final.csv',
-        transfers_file='data/final/transfers_final.csv',
-        timeseries_file='data/final/multimodal_timeseries.parquet'
+        nodes_file=str(base_path / 'data' / 'final' / 'nodes_final.csv'),
+        edges_file=str(base_path / 'data' / 'final' / 'edges_final.csv'),
+        transfers_file=str(base_path / 'data' / 'final' / 'transfers_final.csv'),
+        timeseries_file=str(base_path / 'data' / 'final' / 'multimodal_timeseries.parquet'),
+        here_patterns_file=str(here_patterns) if here_patterns.exists() else None
     )
     
     # Build unified graph
     G = mlg.build_unified_graph(include_transfers=True)
     
-    # Get travel times at specific time
-    travel_times = mlg.get_travel_times_at_time('2025-11-25 08:00:00')
-    print(f"\nTravel times at 8:00 AM: {len(travel_times)} edges")
+    # Test time-dependent travel times
+    from datetime import datetime
+    
+    # Monday 8:30 AM (morning rush)
+    test_time = datetime(2025, 12, 1, 8, 30)  # Monday
+    travel_times = mlg.get_travel_times_for_datetime(test_time)
+    print(f"\nTravel times at Monday 8:30 AM: {len(travel_times)} edges")
+    
+    # Get congestion summary
+    summary = mlg.get_congestion_summary(test_time)
+    print(f"Congestion summary: {summary}")
     
     # Update graph with time-dependent weights
     updated = mlg.update_edge_weights(G, travel_times)
