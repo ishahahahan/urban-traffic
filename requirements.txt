@@ -1,0 +1,27 @@
+# Core dependencies
+pandas>=2.0.0
+numpy>=1.24.0
+networkx>=3.0
+scipy>=1.10.0
+
+# Geospatial
+osmnx>=1.6.0
+geopandas>=0.13.0
+shapely>=2.0.0
+
+# Data formats
+pyarrow>=12.0.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Progress bars
+tqdm>=4.65.0
+
+# Jupyter (optional, for notebooks)
+jupyter>=1.0.0
+ipykernel>=6.25.0
+
+# Testing (optional)
+pytest>=7.0.0

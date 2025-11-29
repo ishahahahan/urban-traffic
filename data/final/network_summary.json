@@ -1,0 +1,32 @@
+{
+  "total_nodes": 125482,
+  "total_edges": 335998,
+  "total_transfers": 215892,
+  "layers": {
+    "road": {
+      "nodes": 62620,
+      "edges": 167783
+    },
+    "metro": {
+      "nodes": 242,
+      "edges": 562
+    },
+    "walk": {
+      "nodes": 62620,
+      "edges": 167653
+    }
+  },
+  "transfer_types": {
+    "park_and_walk": 62620,
+    "get_vehicle": 62620,
+    "walk_to_metro": 22663,
+    "metro_to_walk": 22663,
+    "metro_entry": 22663,
+    "metro_exit": 22663
+  },
+  "modes": {
+    "car": 167783,
+    "walk": 167653,
+    "metro": 562
+  }
+}
