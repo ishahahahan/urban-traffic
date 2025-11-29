@@ -18,8 +18,8 @@ import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(script_dir))
 
-from data_processing.fix_metro_network import fix_metro_network
-from data_processing.fix_transfers import create_all_transfers, verify_transfers
+from src.data_processing.fix_metro_network import fix_metro_network
+from src.data_processing.fix_transfers import create_all_transfers, verify_transfers
 import pandas as pd
 import json
 
