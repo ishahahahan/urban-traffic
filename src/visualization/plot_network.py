@@ -288,6 +288,148 @@ def plot_time_series_comparison(timeseries_df, edge_ids, figsize=(14, 6)):
     return fig, ax
 
 
+def plot_transfers(nodes_df, transfers_df, figsize=(15, 12), sample_size=1000):
+    """
+    Visualize transfer connections between layers.
+    
+    Parameters:
+    -----------
+    nodes_df : DataFrame
+        Node information with x, y, layer
+    transfers_df : DataFrame
+        Transfer information with from_node, to_node, transfer_type
+    figsize : tuple
+        Figure size
+    sample_size : int
+        Number of transfers to sample for visualization (to avoid clutter)
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    # Transfer type colors
+    TRANSFER_COLORS = {
+        'park_and_walk': '#FFA500',    # Orange
+        'get_vehicle': '#FFD700',       # Gold
+        'metro_entry': '#00CED1',       # Dark Cyan
+        'metro_exit': '#20B2AA',        # Light Sea Green
+        'walk_to_metro': '#9370DB',     # Medium Purple
+        'metro_to_walk': '#BA55D3',     # Medium Orchid
+    }
+    
+    # Create node lookup
+    node_coords = nodes_df.set_index('node_id')[['x', 'y', 'layer']].to_dict('index')
+    
+    # Plot base nodes by layer
+    layer_names = {0: 'Road', 1: 'Metro', 2: 'Walk'}
+    for layer in [0, 1, 2]:
+        layer_nodes = nodes_df[nodes_df['layer'] == layer]
+        color = LAYER_COLORS[layer]
+        size = 100 if layer == 1 else 5
+        ax.scatter(layer_nodes['x'], layer_nodes['y'], 
+                  c=color, s=size, alpha=0.3, label=f'{layer_names[layer]} nodes')
+    
+    # Sample transfers for visualization
+    if len(transfers_df) > sample_size:
+        sampled = transfers_df.sample(n=sample_size, random_state=42)
+    else:
+        sampled = transfers_df
+    
+    # Plot transfers by type
+    for t_type in transfers_df['transfer_type'].unique():
+        type_transfers = sampled[sampled['transfer_type'] == t_type]
+        
+        lines = []
+        for _, t in type_transfers.iterrows():
+            from_node = t['from_node']
+            to_node = t['to_node']
+            
+            if from_node in node_coords and to_node in node_coords:
+                lines.append([
+                    (node_coords[from_node]['x'], node_coords[from_node]['y']),
+                    (node_coords[to_node]['x'], node_coords[to_node]['y'])
+                ])
+        
+        if lines:
+            color = TRANSFER_COLORS.get(t_type, 'gray')
+            lc = LineCollection(lines, colors=color, alpha=0.5, linewidths=0.5,
+                              label=f'{t_type} ({len(type_transfers)} shown)')
+            ax.add_collection(lc)
+    
+    # Highlight metro stations
+    metro_nodes = nodes_df[nodes_df['layer'] == 1]
+    ax.scatter(metro_nodes['x'], metro_nodes['y'], c='#4ECDC4', s=150, 
+              marker='s', edgecolors='black', linewidths=2, zorder=5, label='Metro Stations')
+    
+    ax.set_xlabel('Longitude', fontsize=12)
+    ax.set_ylabel('Latitude', fontsize=12)
+    ax.set_title('Transfer Connections Between Network Layers', fontsize=14, fontweight='bold')
+    ax.legend(loc='upper left', fontsize=8, ncol=2)
+    ax.grid(True, alpha=0.3)
+    ax.set_aspect('equal')
+    
+    plt.tight_layout()
+    return fig, ax
+
+
+def plot_metro_catchment(nodes_df, transfers_df, metro_station_id, figsize=(12, 10)):
+    """
+    Visualize the catchment area of a metro station (all nodes that can transfer to it).
+    
+    Parameters:
+    -----------
+    nodes_df : DataFrame
+        Node information
+    transfers_df : DataFrame
+        Transfer information
+    metro_station_id : str
+        The metro station node_id to visualize
+    figsize : tuple
+        Figure size
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    # Get metro station info
+    metro_node = nodes_df[nodes_df['node_id'] == metro_station_id].iloc[0]
+    station_name = metro_node['name'] if pd.notna(metro_node['name']) else metro_station_id
+    
+    # Find all nodes that can transfer to this metro station
+    to_metro = transfers_df[transfers_df['to_node'] == metro_station_id]
+    from_metro = transfers_df[transfers_df['from_node'] == metro_station_id]
+    
+    connected_nodes = set(to_metro['from_node'].tolist() + from_metro['to_node'].tolist())
+    
+    # Plot all nodes faded
+    ax.scatter(nodes_df['x'], nodes_df['y'], c='lightgray', s=2, alpha=0.3)
+    
+    # Plot connected nodes
+    connected_df = nodes_df[nodes_df['node_id'].isin(connected_nodes)]
+    
+    # Color by layer
+    for layer in [0, 2]:  # Road and Walk
+        layer_nodes = connected_df[connected_df['layer'] == layer]
+        color = LAYER_COLORS[layer]
+        label = 'Road access' if layer == 0 else 'Walk access'
+        ax.scatter(layer_nodes['x'], layer_nodes['y'], c=color, s=20, 
+                  alpha=0.7, label=f'{label} ({len(layer_nodes)})')
+    
+    # Plot metro station prominently
+    ax.scatter(metro_node['x'], metro_node['y'], c='#4ECDC4', s=400, 
+              marker='s', edgecolors='black', linewidths=3, zorder=5)
+    ax.annotate(station_name, (metro_node['x'], metro_node['y']), 
+               fontsize=12, fontweight='bold', xytext=(10, 10), 
+               textcoords='offset points',
+               bbox=dict(boxstyle='round,pad=0.5', facecolor='white', alpha=0.9))
+    
+    ax.set_xlabel('Longitude', fontsize=12)
+    ax.set_ylabel('Latitude', fontsize=12)
+    ax.set_title(f'Catchment Area: {station_name}', fontsize=14, fontweight='bold')
+    ax.legend(loc='best', fontsize=10)
+    ax.grid(True, alpha=0.3)
+    ax.set_aspect('equal')
+    
+    plt.tight_layout()
+    return fig, ax
+
+
 if __name__ == "__main__":
     # Example usage
     import os
@@ -297,15 +439,45 @@ if __name__ == "__main__":
     project_root = os.path.dirname(os.path.dirname(script_dir))
     
     # Use absolute paths
-    nodes = pd.read_csv(os.path.join(project_root, 'data/final/nodes_final.csv'), dtype={'name': str})
+    nodes = pd.read_csv(os.path.join(project_root, 'data/final/nodes_final.csv'), 
+                        dtype={'name': str}, low_memory=False)
     edges = pd.read_csv(os.path.join(project_root, 'data/final/edges_final.csv'))
+    transfers = pd.read_csv(os.path.join(project_root, 'data/final/transfers_final.csv'))
     
     output_dir = os.path.join(project_root, 'output')
     os.makedirs(output_dir, exist_ok=True)
     
-    # Plot network
+    print("Generating visualizations...")
+    
+    # 1. Plot network layers
+    print("1. Plotting network layers...")
     fig, ax = plot_network_layers(nodes, edges)
-    plt.savefig(os.path.join(output_dir, 'network_visualization.png'), dpi=300, bbox_inches='tight')
     plt.show()
     
-    print("Visualization complete!")
+    # 2. Plot transfers
+    print("2. Plotting transfer connections...")
+    fig, ax = plot_transfers(nodes, transfers, sample_size=2000)
+    plt.show()
+    
+    # 3. Plot metro catchment for a sample station
+    print("3. Plotting metro catchment area...")
+    metro_nodes = nodes[nodes['layer'] == 1]
+    # Use Rajiv Chowk as sample metro station
+    rajiv_chowk = metro_nodes[metro_nodes['name'].str.contains('Rajiv Chowk', case=False, na=False)]
+    if len(rajiv_chowk) > 0:
+        sample_metro = rajiv_chowk.iloc[0]['node_id']
+    else:
+        sample_metro = metro_nodes[metro_nodes['name'].notna()].iloc[10]['node_id']
+    fig, ax = plot_metro_catchment(nodes, transfers, sample_metro)
+    plt.show()
+    
+    # Print summary
+    print("\n" + "="*50)
+    print("TRANSFER SUMMARY")
+    print("="*50)
+    print(f"Total transfers: {len(transfers)}")
+    print("\nBy type:")
+    for t_type in transfers['transfer_type'].unique():
+        count = len(transfers[transfers['transfer_type'] == t_type])
+        print(f"  {t_type}: {count:,}")
+    print("="*50)
